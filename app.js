@@ -16,7 +16,7 @@ app.use(bodyParser.json())
 //Configurando static folder
 app.use(express.static("uploads"));
 
-//Configure headre HTTP - CORS
+//Configure header HTTP - CORS
 app.use(cors());
 
 //Configuracion de las rutas

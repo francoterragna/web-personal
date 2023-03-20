@@ -11,6 +11,6 @@ const UserSchema = mongoose.Schema({
     role: String,
     active: Boolean,
     avatar: String
-})
+});
 
 module.exports = mongoose.model("User", UserSchema);

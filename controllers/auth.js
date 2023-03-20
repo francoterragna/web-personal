@@ -19,8 +19,6 @@ const salt = bcrypt.genSaltSync(10);
 const hashPassword = bcrypt.hashSync(password, salt);
 user.password = hashPassword;
 
-
-
 user.save((error, userStorage) => {
     error ? res.status(400).send({msg: "Error al crear el usuario"}) : res.status(200).send(userStorage);
 })
@@ -28,7 +26,7 @@ user.save((error, userStorage) => {
 // console.log(password); // contraseña sin encriptar
 // console.log(hashPassword); // contraseña encriptada
 
-console.log(user);
+// console.log(user);
 
 // res.status(200).send({msg: user})
 }
