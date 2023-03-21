@@ -53,17 +53,18 @@ let login = async (req,res) => {
             res.status(400).send({msg:"La contraseña es obligatoria"})
         }else{
             const emailToLowerCase = email.toLowerCase();
-            let userStore = await User.findOne({ email: emailToLowerCase});
+            let userStore = await User.findOne({ email: emailToLowerCase}); // el "User" viene de los modelos creados en ../models/user.js, el findOne es un método de mongoose.
             bcrypt.compare(password, userStore.password, (error, check) => {
                 if(error){
                     res.status(500).send({msg: "Error del servidor"})
                 } else if (!check){
                     res.status(500).send({msg:"Contraseña incorrecta"})
                 } else if (!userStore.active) {
-                    res.status(401).send({msg: "usuario no activo"})
+                    res.status(401).send({msg: "Usuario no activo"})
                 } else {
                     res.status(200).send({
-                        access: jwt.createAccesToken(userStore),
+                        msg: "Usuario logueado",
+                        access: jwt.createAccesToken(userStore), // Una vez que me logueo con mis credenciales, me da los token  
                         refresh: jwt.createRefreshToken(userStore)
                     })
                 }
@@ -76,7 +77,30 @@ let login = async (req,res) => {
 
 }
 
+let refreshAccessToken = async (req,res) => { //Actualizo el access token con el refresh token
+    const {token} = req.body;
+
+    
+    try{
+        const {user_id} = jwt.decoder(token);
+        let usuarioEncontrado = await User.findOne({_id: user_id})
+        if(!usuarioEncontrado){
+            res.status(500).send({msg: "Error del servidor"})
+        } else {
+            res.status(200).send({
+                accessToken: jwt.createAccesToken(usuarioEncontrado)
+            })
+            console.log("Todo flama");
+        }
+    } catch (error){
+        res.status(500).send({msg:"Error del servidor"});
+        console.log(error);
+    }
+
+}
+
 module.exports = {
     register,
-    login
+    login,
+    refreshAccessToken
 };

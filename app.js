@@ -7,6 +7,8 @@ const app = express();
 
 //Import routings
 const authRoutes = require("./router/auth");
+const userRoutes = require('./router/user');
+
 //Configuring body parser para poder mandar contenido JSON en el body.
 app.use(bodyParser.urlencoded({extended : true}))
 
@@ -21,6 +23,7 @@ app.use(cors());
 
 //Configuracion de las rutas
 app.use(`/api/${API_VERSION}`,authRoutes)
+app.use(`/api/${API_VERSION}`,userRoutes)
 
 module.exports = app;
 
