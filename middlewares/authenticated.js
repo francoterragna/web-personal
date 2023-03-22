@@ -2,29 +2,29 @@ const jwt = require("../utils/jwt");
 
 const confirmacionAutenticacion = (req ,res ,next ) => {
     if(!req.headers.authorization){
-        res.status(500).send({msg: "La peticion no tiene la cabecera de autenticacion"})
+        res.status(500).send({msg: "La peticion no tiene la cabecera de autenticacion"});
     }
-    console.log("Todo bien, puede continuar");
-    next();
+    
 
     const token = req.headers.authorization.replace("Bearer ", "")
     console.log(token);
 
     try {
-        const payload = jwt.decoder(token);
-        console.log(payload);
+        const payload = jwt.decoder(token); //Decodificamos el token y lo guardamos en payload
+        //console.log(payload); // El token decodificado devuelve un objeto
 
-        const { exp } = payload;
+        const { exp } = payload; // extraemos la key exp del objeto payload, que es el id del usuario.
         const currentDate = new Date().getTime();
 
         //Comprobamos si la fecha de expriacion del token es menor a la fecha actual
 
-        if(exp <= currentDate){
-            return res.status(400).send({msg: "El token ha caducado"})
-        } else {
+        if(exp <= currentDate) return res.status(400).send({msg: "El token ha caducado"})
+            
             req.user = payload;
+            console.log(req.user);
+            console.log("------------ Middleware authenticated accepted ------------");
             next();
-        }
+
 
     } catch (error) {
        return res.status(400).send({msg: "token invalido"})
