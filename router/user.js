@@ -4,6 +4,6 @@ const confirmacionAutenticacion = require('../middlewares/authenticated');
 
 const api = express.Router();
 
-api.get('/user/me', confirmacionAutenticacion , userController.getMe);
+api.get('/user/me', confirmacionAutenticacion, userController.getMe);
 
 module.exports = api;
