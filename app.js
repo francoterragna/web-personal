@@ -22,8 +22,8 @@ app.use(express.static("uploads"));
 app.use(cors());
 
 //Configuracion de las rutas
-app.use(`/api/${API_VERSION}`,authRoutes)
-app.use(`/api/${API_VERSION}`,userRoutes)
+app.use(`/auth`,authRoutes)
+app.use(`/user`,userRoutes)
 
 module.exports = app;
 

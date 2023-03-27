@@ -1,5 +1,6 @@
 const User = require('../models/user');
 const bcrypt = require("bcryptjs");
+const {getFilePath} = require("../utils/image");
 
 const getMe = async (req, res) => {
     
@@ -45,29 +46,75 @@ const createUser = async (req, res) => {
             res.status(400).send({msg: "La contraseña debe tener mas de 3 caracteres"})
             return;
         }
-    
+
+        
         if(!email){
             res.status(400).send({msg: "El email es obligatorio"})
             return;
         } else {
+            if(req.files.avatar){
+                const imagePath = getFilePath(req.files.avatar);
+                console.log(`http://localhost:3977/${imagePath}`);
+                user.avatar = imagePath;
+            }
             const userStorage = await user.save();
             console.log(userStorage);
             res.status(200).send(userStorage);
             return;
         }
     
-        // if(req.files.avatar) console.log("Procesar imagen");
 
     } catch(error) {
-        console.log("Estoy en el catch");
+        console.log("Estoy en el catch del user controller", error);
         res.status(400).send({msg: "Error al crear el usuario"});
         return;
     }
 
 }
 
+const updateUser = async (req, res) => {
+    const { id } = req.params;
+     const userData = req.body;
+
+     //Encriptando contraseña al actualizar
+
+        if(userData.password){
+            const salt = bcrypt.genSaltSync(10);
+            const hashPassword = bcrypt.hashSync(userData.password, salt);
+            userData.password = hashPassword;
+        } else {
+            delete userData.password; // En caso de que no exista, o sea undefined, la eliminamos.
+        }
+
+        if(req.files.avatar) {
+            const AvatarArray = req.files.avatar.path.split("\\");
+            userData.avatar = `${AvatarArray[1]}/${AvatarArray[2]}` // Ruta de la imagen del avatar
+        }
+
+         await User.findByIdAndUpdate({_id: id}, userData, {new: true})
+            .then(updatedUser => {
+                res.status(200).send({
+                    msg:"Actualizacion correcta",
+                    user: updatedUser
+                });
+                return;
+            })
+            .catch(error => {
+                res.status(400).send({
+                    msg: "Error al actualizar el usuario",
+                    err: error
+                });
+                return;
+            })
+
+
+     //Primero actualizamos el usuario sin actualizar password ni avatar
+     
+}
+
 module.exports = {
     getMe,
     getUsers,
-    createUser
+    createUser,
+    updateUser
 }

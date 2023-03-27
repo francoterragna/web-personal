@@ -18,7 +18,8 @@ const connectDB = async () => {
         console.log("####################");
         console.log("##### API REST #####");
         console.log("####################");
-        console.log(`http://${IP_SERVER}:${PORT}/api/${API_VERSION}`);
+        console.log(`http://${IP_SERVER}:${PORT}`);
+        // console.log(`http://${IP_SERVER}:${PORT}/api/${API_VERSION}`);
       })
     } catch (err) {
       console.log('Error al conectar a la base de datos', err);

@@ -1,6 +1,6 @@
 const jwt = require("../utils/jwt");
 
-const confirmacionAutenticacion = (req ,res ,next ) => {
+function confirmacionAutenticacion (req ,res ,next ) {
     if(!req.headers.authorization){
         res.status(500).send({msg: "La peticion no tiene la cabecera de autenticacion"});
     }
@@ -32,5 +32,7 @@ const confirmacionAutenticacion = (req ,res ,next ) => {
 }
 
 
-module.exports = confirmacionAutenticacion;
+module.exports = {
+    confirmacionAutenticacion
+};
     
