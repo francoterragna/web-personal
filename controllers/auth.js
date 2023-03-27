@@ -72,7 +72,8 @@ let login = async (req,res) => {
         }
 
     } catch (error){
-        console.log(error);
+        res.status(500).send({msg: "Error al loguearse"});
+        return;
     }
 
 }

@@ -20,9 +20,11 @@ const getMe = async (req, res) => {
 
 const getUsers = async (req, res)  => {
     const {active} = req.query; // El req.query viene de la URL despues del "?"
-    console.log("active ->", active);
+    if(active != undefined) console.log("active ->", active);
     let response = null;
 
+
+    //Por medio de las query le podemos pedir que busque los activos, inactivos o ambos
     if(active == undefined){
         response = await User.find();
     } else {
@@ -74,47 +76,57 @@ const createUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
     const { id } = req.params;
-     const userData = req.body;
+    const userData = req.body;
 
      //Encriptando contraseña al actualizar
 
-        if(userData.password){
-            const salt = bcrypt.genSaltSync(10);
-            const hashPassword = bcrypt.hashSync(userData.password, salt);
-            userData.password = hashPassword;
-        } else {
-            delete userData.password; // En caso de que no exista, o sea undefined, la eliminamos.
-        }
+    if(userData.password){
+        const salt = bcrypt.genSaltSync(10);
+        const hashPassword = bcrypt.hashSync(userData.password, salt);
+        userData.password = hashPassword;
+    } else {
+        delete userData.password; // En caso de que no exista, o sea undefined, la eliminamos.
+    }
 
-        if(req.files.avatar) {
-            const AvatarArray = req.files.avatar.path.split("\\");
-            userData.avatar = `${AvatarArray[1]}/${AvatarArray[2]}` // Ruta de la imagen del avatar
-        }
+    if(req.files.avatar) {
+        const AvatarArray = req.files.avatar.path.split("\\");
+        userData.avatar = `${AvatarArray[1]}/${AvatarArray[2]}` // Ruta de la imagen del avatar
+    }
 
-         await User.findByIdAndUpdate({_id: id}, userData, {new: true})
-            .then(updatedUser => {
-                res.status(200).send({
-                    msg:"Actualizacion correcta",
-                    user: updatedUser
-                });
-                return;
-            })
-            .catch(error => {
-                res.status(400).send({
-                    msg: "Error al actualizar el usuario",
-                    err: error
-                });
-                return;
-            })
+        await User.findByIdAndUpdate({_id: id}, userData, {new: true})
+        .then(updatedUser => {
+            res.status(200).send({
+                msg:"Actualizacion correcta",
+                user: updatedUser
+            });
+            return;
+        })
+        .catch(error => {
+            res.status(400).send({
+                msg: "Error al actualizar el usuario",
+                err: error
+            });
+            return;
+        })
+}
 
+const deleteUser = async (req,res) => {
+    const { id } = req.params;
 
-     //Primero actualizamos el usuario sin actualizar password ni avatar
-     
+    await User.findByIdAndDelete(id)
+    .then(deletedUser => {
+        res.status(200).send({msg: `El usuario con email ${deletedUser.email} ha sido eliminado.`, user: deletedUser});
+        return;
+    })
+    .catch(error => {
+        res.status(500).send({msg:"Ha habido un error al intentar eliminar el usuario", Error: error.message})
+    })
 }
 
 module.exports = {
     getMe,
     getUsers,
     createUser,
-    updateUser
+    updateUser,
+    deleteUser
 }
