@@ -34,19 +34,56 @@ const getMenus = async (req, res) => {
     
         //Por medio de las query le podemos pedir que busque los activos, inactivos o ambos
         if(active == undefined){
-            response = await Menu.find();
+            response = await Menu.find().sort({order: "asc"});
         } else {
-            response = await Menu.find({active});
+            response = await Menu.find({active}).sort({order: "asc"});
         }
-        res.status(200).send(response);
+
+        if(!response) {
+            res.status(400).send({msg: "No se ha encontrado ningún menu"})
+        } else {
+            res.status(200).send(response);
+        }
     } catch (error) {
         res.status(400).send({msg: error})
     }
 
 }
 
+const updateMenus = async (req, res) => {
+    const { id } = req.params;
+    const menuData = req.body;
+
+    await Menu.findByIdAndUpdate({_id: id}, menuData , {new: true})
+    .then(updatedMenu => {
+        res.status(200).send({
+            msg:"Actualizacion correcta",
+            menu: updatedMenu
+        })
+    })
+    .catch(error => res.status(400).send(error))
+}
+
+const deleteMenu = async (req,res) => {
+    const { id } = req.params;
+
+    await Menu.findByIdAndDelete(id)
+    .then(deletedMenu => {
+        if(!deletedMenu){
+            res.status(400).send({msg:"El menu que desea eliminar no existe"})
+        } else{
+            res.status(200).send({
+                msg: "Menu eliminado",
+                menu: deletedMenu})
+        }
+    }).catch(error => {
+        res.status(400).send(error)
+    })
+}
+
 module.exports = {
     createMenu,
-    getMenus
-    
+    getMenus,
+    updateMenus,
+    deleteMenu
 }

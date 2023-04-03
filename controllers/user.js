@@ -2,10 +2,10 @@ const User = require('../models/user');
 const bcrypt = require("bcryptjs");
 const {getFilePath} = require("../utils/image");
 
+//! OBTENER USUARIO LOGUEADO
 const getMe = async (req, res) => {
     
     const { user_id } = req.user; // Saco unicamente el user_id
-    // console.log("Este es el req.user: " + req.user);
     
     const response = await User.findById(user_id); // En response guardo el usuario que encontró en mongo con ese id
 
@@ -18,6 +18,7 @@ const getMe = async (req, res) => {
     // res.status(200).send({msg: "OK"})
 }
 
+//! OBTENER USUARIOS
 const getUsers = async (req, res)  => {
     const {active} = req.query; // El req.query viene de la URL despues del "?"
     if(active != undefined) console.log("active ->", active);
@@ -32,6 +33,7 @@ const getUsers = async (req, res)  => {
     res.status(200).send(response);
 }
 
+//! CREAR USUARIOS
 const createUser = async (req, res) => {
 
     const {password, email} = req.body;
@@ -73,6 +75,7 @@ const createUser = async (req, res) => {
 
 }
 
+//! ACTUALIZAR USUARIOS
 const updateUser = async (req, res) => {
     const { id } = req.params;
     const userData = req.body;
@@ -109,6 +112,7 @@ const updateUser = async (req, res) => {
         })
 }
 
+//! ELIMINAR USUARIOS
 const deleteUser = async (req,res) => {
     const { id } = req.params;
 
