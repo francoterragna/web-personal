@@ -23,7 +23,6 @@ const getUsers = async (req, res)  => {
     if(active != undefined) console.log("active ->", active);
     let response = null;
 
-
     //Por medio de las query le podemos pedir que busque los activos, inactivos o ambos
     if(active == undefined){
         response = await User.find();

@@ -8,6 +8,8 @@ const app = express();
 //Import routings
 const authRoutes = require("./router/auth");
 const userRoutes = require('./router/user');
+const menuRoutes = require('./router/menu');
+
 
 //Configuring body parser para poder mandar contenido JSON en el body.
 app.use(bodyParser.urlencoded({extended : true}))
@@ -22,8 +24,8 @@ app.use(express.static("uploads"));
 app.use(cors());
 
 //Configuracion de las rutas
-app.use(`/auth`,authRoutes)
-app.use(`/user`,userRoutes)
+app.use(`/auth`,authRoutes);
+app.use(`/user`,userRoutes);
+app.use('/menu',menuRoutes);
 
 module.exports = app;
-
