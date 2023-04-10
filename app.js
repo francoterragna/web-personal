@@ -9,6 +9,7 @@ const app = express();
 const authRoutes = require("./router/auth");
 const userRoutes = require('./router/user');
 const menuRoutes = require('./router/menu');
+const courseRoutes = require('./router/course');
 
 
 //Configuring body parser para poder mandar contenido JSON en el body.
@@ -27,5 +28,6 @@ app.use(cors());
 app.use(`/auth`,authRoutes);
 app.use(`/user`,userRoutes);
 app.use('/menu',menuRoutes);
+app.use('/course', courseRoutes);
 
 module.exports = app;
