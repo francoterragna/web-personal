@@ -6,10 +6,11 @@ const cors = require("cors");
 const app = express();
 
 //Import routings
-const authRoutes = require("./router/auth");
+const authRoutes = require('./router/auth');
 const userRoutes = require('./router/user');
 const menuRoutes = require('./router/menu');
 const courseRoutes = require('./router/course');
+const postRoutes = require('./router/post');
 
 
 //Configuring body parser para poder mandar contenido JSON en el body.
@@ -29,5 +30,6 @@ app.use(`/auth`,authRoutes);
 app.use(`/user`,userRoutes);
 app.use('/menu',menuRoutes);
 app.use('/course', courseRoutes);
+app.use(`/post`, postRoutes);
 
 module.exports = app;

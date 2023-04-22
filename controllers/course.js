@@ -10,8 +10,8 @@ const createCourse = async (req,res) => {
     course.miniature = imagePath;
 
     
-        const courseStored = await course.save();
-        res.status(200).send(courseStored)
+    const courseStored = await course.save();
+    res.status(200).send(courseStored)
     } catch (error) {
         res.status(400).send(error)
     }

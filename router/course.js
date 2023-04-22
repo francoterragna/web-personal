@@ -10,8 +10,12 @@ const api = express.Router();
 //APIs
 
 api.post('/', [md_auth.confirmacionAutenticacion, md_upload], CourseController.createCourse);
+
 api.get('/', CourseController.getCourses);
+
 api.patch('/:id', [md_auth.confirmacionAutenticacion, md_upload], CourseController.updateCourse);
+
 api.delete('/:id', [md_auth.confirmacionAutenticacion], CourseController.deleteCourse);
+
 
 module.exports = api;

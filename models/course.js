@@ -10,6 +10,6 @@ const CourseSchema = mongoose.Schema({
     score: Number
 });
 
-CourseSchema.plugin(mongoosePaginate);
+CourseSchema.plugin(mongoosePaginate); // Con esta configuracion se puede hacer una paginacion
 
 module.exports = mongoose.model("Course", CourseSchema);
