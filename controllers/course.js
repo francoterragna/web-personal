@@ -37,7 +37,50 @@ const getCourses = (req,res) => {
     })
 }
 
+const updateCourse = async (req,res) => {
+   try{ 
+        const { id } = req.params;
+        const courseData = req.body;
+
+        if(req.files.miniature) {
+            const imagePath = image.getFilePath(req.files.miniature);
+            courseData.miniature = imagePath;
+        }
+        await Course.findByIdAndUpdate({_id: id}, courseData, {new: true})
+        .then(updatedCourse => {
+            res.status(200).send({
+                msg: "actualizacion correcta",
+                course: updatedCourse
+            });
+            return;
+        })
+        .catch (error => {
+            res.status(400).send({
+                msg: "Error al actualizar el curso",
+                err: error
+            })
+        })
+    }
+    catch(error){
+        res.status(400).send(error)
+    }
+}
+
+const deleteCourse = async (req,res) => {
+    const { id } = req.params;
+
+    await Course.findByIdAndDelete(id)
+    .then(deletedCourse => {
+        res.status(200).send({msg: `El curso ${deletedCourse.title} ha sido eliminado`})
+    })
+    .catch(error => {
+        res.status(400).send({msg: "Ha ocurrido un error al eliminar el curso", err: error});
+    })
+}
+
 module.exports = {
     createCourse,
-    getCourses
+    getCourses,
+    updateCourse,
+    deleteCourse
 };
