@@ -2,7 +2,7 @@ const User = require('../models/user');
 const bcrypt = require("bcryptjs");
 const {getFilePath} = require("../utils/image");
 
-//! OBTENER USUARIO LOGUEADO
+// = OBTENER USUARIO LOGUEADO
 const getMe = async (req, res) => {
     
     const { user_id } = req.user; // Saco unicamente el user_id
@@ -18,7 +18,7 @@ const getMe = async (req, res) => {
     // res.status(200).send({msg: "OK"})
 }
 
-//! OBTENER USUARIOS
+//= OBTENER USUARIOS
 const getUsers = async (req, res)  => {
     const {active} = req.query; // El req.query viene de la URL despues del "?"
     if(active != undefined) console.log("active ->", active);
@@ -33,7 +33,7 @@ const getUsers = async (req, res)  => {
     res.status(200).send(response);
 }
 
-//! CREAR USUARIOS
+//= CREAR USUARIOS
 const createUser = async (req, res) => {
 
     const {password, email} = req.body;
@@ -75,7 +75,7 @@ const createUser = async (req, res) => {
 
 }
 
-//! ACTUALIZAR USUARIOS
+//= ACTUALIZAR USUARIOS
 const updateUser = async (req, res) => {
     const { id } = req.params;
     const userData = req.body;
@@ -112,7 +112,7 @@ const updateUser = async (req, res) => {
         })
 }
 
-//! ELIMINAR USUARIOS
+//= ELIMINAR USUARIOS
 const deleteUser = async (req,res) => {
     const { id } = req.params;
 
