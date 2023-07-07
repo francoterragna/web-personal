@@ -5,6 +5,10 @@ const cors = require("cors");
 
 const app = express();
 
+app.use(cors({
+    origin: '*',
+  }));
+
 //Import routings
 const authRoutes = require('./router/auth');
 const userRoutes = require('./router/user');
@@ -23,13 +27,12 @@ app.use(bodyParser.json())
 app.use(express.static("uploads"));
 
 //Configure header HTTP - CORS
-app.use(cors());
 
 //Configuracion de las rutas
 app.use(`/auth`,authRoutes);
 app.use(`/user`,userRoutes);
 app.use('/menu',menuRoutes);
-app.use('/course', courseRoutes);
-app.use(`/post`, postRoutes);
+app.use('/courses',courseRoutes);
+app.use(`/posts`, postRoutes);
 
 module.exports = app;

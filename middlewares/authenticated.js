@@ -7,7 +7,6 @@ function confirmacionAutenticacion (req ,res ,next ) {
     
 
     const token = req.headers.authorization.replace("Bearer ", "")
-    console.log(`Token: ${token}`);
 
     try {
         const payload = jwt.decoder(token); //Decodificamos el token y lo guardamos en payload
@@ -21,7 +20,6 @@ function confirmacionAutenticacion (req ,res ,next ) {
         if(exp <= currentDate) return res.status(400).send({msg: "El token ha caducado"})
             
             req.user = payload;
-            // console.log(req.user);
             console.log("------------ Middleware authenticated accepted ------------");
             next();
 
